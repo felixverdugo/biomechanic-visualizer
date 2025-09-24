@@ -15,7 +15,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ phase }) => {
       // Divide cada párrafo en partes: texto normal y texto en negrita
       const parts = paragraph.split(/(\*\*.*?\*\*)/g).filter(Boolean);
       return (
-        <p key={pIndex} className="text-gray-600 leading-relaxed mb-4 last:mb-0">
+        <p key={pIndex} className="text-gray-600 leading-loose mb-4 last:mb-0">
           {parts.map((part, partIndex) => {
             if (part.startsWith('**') && part.endsWith('**')) {
               return (
@@ -32,7 +32,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ phase }) => {
   };
 
   return (
-    <div className="bg-slate-50 p-6 rounded-lg h-full flex flex-col justify-center shadow-inner border border-slate-200">
+    <div className="bg-slate-50 p-6 rounded-lg h-full flex flex-col shadow-inner border border-slate-200 overflow-y-auto">
       <h2 className="text-2xl font-bold text-slate-800 mb-4 border-b-2 border-slate-300 pb-2">{title}</h2>
       <div>
         {renderDescription(description)}

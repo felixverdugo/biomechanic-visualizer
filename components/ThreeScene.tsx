@@ -1,7 +1,5 @@
-
-// FIX: The triple-slash directive was causing a type resolution error for '@react-three/fiber'.
-// Removing it allows TypeScript to correctly infer the JSX namespace and types from the package imports, which resolves the compilation errors.
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+// FIX: Changed to a single default React import and qualified all hooks and types with `React.` to fix JSX namespace issues with React Three Fiber.
+import React from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder, Cone, Plane, Line } from '@react-three/drei';
 import * as THREE from 'three';
@@ -14,9 +12,9 @@ const BODY_WEIGHT_FORCE = 2.0;
 
 // A custom, animated component for force arrows with emissive pulse effect
 const AnimatedForceArrow = ({ origin, direction, length, color, pulseTrigger }) => {
-  const groupRef = useRef<THREE.Group>(null!);
+  const groupRef = React.useRef<THREE.Group>(null!);
   
-  const material = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const material = React.useMemo(() => new THREE.MeshStandardMaterial({ 
     color, 
     transparent: true, 
     opacity: 1,
@@ -24,14 +22,14 @@ const AnimatedForceArrow = ({ origin, direction, length, color, pulseTrigger }) 
     emissiveIntensity: 0.5 
   }), [color]);
 
-  const pulseTime = useRef(0);
-  useEffect(() => {
+  const pulseTime = React.useRef(0);
+  React.useEffect(() => {
     if (length > 0.01) { // Only pulse if the arrow is visible
       pulseTime.current = 1.0; 
     }
   }, [pulseTrigger]);
 
-  const target = useMemo(() => {
+  const target = React.useMemo(() => {
     const quat = new THREE.Quaternion();
     const dir = (direction && direction.lengthSq() > 0) ? direction.clone().normalize() : vec(0, 1, 0);
     quat.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
@@ -86,9 +84,9 @@ const AnimatedForceArrow = ({ origin, direction, length, color, pulseTrigger }) 
 
 // Custom animated line for compression forces
 const AnimatedCompressionLine = ({ start, end, color, visible }) => {
-    const lineRef = useRef<any>(null!);
+    const lineRef = React.useRef<any>(null!);
     // Store current points in a ref to avoid re-renders
-    const currentPoints = useRef([start.clone(), end.clone()]);
+    const currentPoints = React.useRef([start.clone(), end.clone()]);
     
     useFrame(() => {
         if (!lineRef.current) return;
@@ -116,7 +114,7 @@ const AnimatedCompressionLine = ({ start, end, color, visible }) => {
 };
 
 const HumanLeg = ({ phase, pulseTrigger }: { phase: GaitPhase, pulseTrigger: number }) => {
-  const forces = useMemo(() => {
+  const forces = React.useMemo(() => {
     switch (phase) {
       case GaitPhase.STATIC_STAND:
         return {
@@ -184,7 +182,7 @@ const HumanLeg = ({ phase, pulseTrigger }: { phase: GaitPhase, pulseTrigger: num
 };
 
 const ProstheticLeg = ({ phase, pulseTrigger }: { phase: GaitPhase, pulseTrigger: number }) => {
-    const forces = useMemo(() => {
+    const forces = React.useMemo(() => {
     switch (phase) {
       case GaitPhase.STATIC_STAND:
         return {
@@ -292,14 +290,14 @@ const SceneContent = ({ phase, setHoverInfo, pulseTrigger }: { phase: GaitPhase;
 
 
 const ThreeScene: React.FC<{ phase: GaitPhase }> = ({ phase }) => {
-  const [hoverInfo, setHoverInfo] = useState<{ text: string; position: { x: number; y: number } } | null>(null);
-  const [pulseTrigger, setPulseTrigger] = useState(0);
+  const [hoverInfo, setHoverInfo] = React.useState<{ text: string; position: { x: number; y: number } } | null>(null);
+  const [pulseTrigger, setPulseTrigger] = React.useState(0);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setPulseTrigger(p => p + 1);
   }, [phase]);
 
-  const labelStyle: React.CSSProperties = useMemo(() => {
+  const labelStyle: React.CSSProperties = React.useMemo(() => {
     if (!hoverInfo || !hoverInfo.position) {
       return { opacity: 0, visibility: 'hidden', pointerEvents: 'none' };
     }
