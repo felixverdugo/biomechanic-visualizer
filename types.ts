@@ -5,3 +5,5 @@ export enum GaitPhase {
   MIDSTANCE = 'Fase Media de Apoyo',
   TOE_OFF = 'Despegue de Dedos',
 }
+
+export type AppView = 'simulator' | 'renders';
