@@ -1,0 +1,5 @@
+{
+  "name": "Visualizador Biomecánico: Pierna vs. Prótesis",
+  "description": "Una aplicación web para visualizar y comparar las líneas de fuerza en una pierna humana y en una prótesis trans-tibial durante diferentes fases de la marcha, utilizando React y Three.js.",
+  "requestFramePermissions": []
+}
